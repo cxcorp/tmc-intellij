@@ -28,17 +28,12 @@ public class UploadExerciseAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
 
-        OperationInProgressNotification note =
-                new OperationInProgressNotification("Uploading exercise, please wait!");
-
         Project project = anActionEvent.getData(PlatformDataKeys.PROJECT);
 
         ExerciseUploadingService.startUploadExercise(project,
                 TmcCoreHolder.get(), new ObjectFinder(),
                 new CheckForExistingExercises(), new SubmissionResultHandler(),
                 TmcSettingsManager.get());
-
-        note.hide();
     }
 
 }

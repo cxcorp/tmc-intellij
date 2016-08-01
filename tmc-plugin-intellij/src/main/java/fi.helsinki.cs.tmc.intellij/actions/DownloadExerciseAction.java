@@ -33,10 +33,6 @@ public class DownloadExerciseAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
-        OperationInProgressNotification note =
-                new OperationInProgressNotification("Downloading exercises, "
-                        + "this may take several minutes");
-
         Project project = anActionEvent.getData(PlatformDataKeys.PROJECT);
 
         try {
@@ -50,6 +46,5 @@ public class DownloadExerciseAction extends AnAction {
                             + "Are your account details correct?\n"
                             + e.getMessage(), "Result", Messages.getErrorIcon());
         }
-        note.hide();
     }
 }
