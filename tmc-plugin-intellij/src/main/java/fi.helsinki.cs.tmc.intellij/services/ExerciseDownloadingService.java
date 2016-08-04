@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * Offers method for downloading exercises from selected course.
+ */
 public class ExerciseDownloadingService {
 
     public static void startDownloadExercise(final TmcCore core,
