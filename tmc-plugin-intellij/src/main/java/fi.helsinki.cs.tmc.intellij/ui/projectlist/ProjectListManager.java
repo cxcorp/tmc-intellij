@@ -4,8 +4,6 @@ import com.intellij.ui.components.JBList;
 import fi.helsinki.cs.tmc.core.domain.Exercise;
 import fi.helsinki.cs.tmc.intellij.services.CourseAndExerciseManager;
 import fi.helsinki.cs.tmc.intellij.services.ObjectFinder;
-import fi.helsinki.cs.tmc.intellij.ui.elements.ProjectListJBList;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,13 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 
 
 public class ProjectListManager {
 
-    private static Map<String, List<ProjectListJBList>> currentListElements;
+    private static Map<String, List<JBList>> currentListElements;
     static List<ProjectListWindow> projectListWindows;
 
     public ProjectListManager() {
@@ -34,9 +30,9 @@ public class ProjectListManager {
         }
     }
 
-    public static void addList(ProjectListJBList list) {
+    public static void addList(JBList list) {
         if (currentListElements.get(list.getName()) == null) {
-            currentListElements.put(list.getName(), new ArrayList<ProjectListJBList>());
+            currentListElements.put(list.getName(), new ArrayList<JBList>());
         }
         currentListElements.get(list.getName()).add(list);
     }
@@ -49,12 +45,12 @@ public class ProjectListManager {
 
 
     public static void refreshCourse(String course) {
-        List<ProjectListJBList> list = currentListElements.get(course);
+        List<JBList> list = currentListElements.get(course);
         if (list == null) {
             return;
         }
 
-        for (ProjectListJBList ProjectListJBList : list) {
+        for (JBList ProjectListJBList : list) {
             if (list == null || !ProjectListJBList.getName().equals(course)) {
                 continue;
             }
@@ -101,7 +97,7 @@ public class ProjectListManager {
         }
     }
 
-    public static void setCurrentListElements(HashMap<String, List<ProjectListJBList>> currentListElements) {
+    public static void setCurrentListElements(HashMap<String, List<JBList>> currentListElements) {
         ProjectListManager.currentListElements = currentListElements;
     }
 

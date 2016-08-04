@@ -1,35 +1,14 @@
 package fi.helsinki.cs.tmc.intellij.services;
 
-import com.intellij.codeInsight.daemon.impl.DaemonProgressIndicator;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.DisposableEditorPanel;
-import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.progress.DumbProgressIndicator;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
-import com.intellij.openapi.progress.util.BackgroundTaskUtil;
-import com.intellij.openapi.progress.util.ProgressIndicatorBase;
-import com.intellij.openapi.progress.util.ProgressWindow;
-import com.intellij.openapi.progress.util.ProgressWindowWithNotification;
-import com.intellij.openapi.progress.util.StandardProgressIndicatorBase;
 import fi.helsinki.cs.tmc.core.TmcCore;
-import fi.helsinki.cs.tmc.core.domain.Course;
 import fi.helsinki.cs.tmc.core.domain.Exercise;
 import fi.helsinki.cs.tmc.core.domain.ProgressObserver;
 import fi.helsinki.cs.tmc.core.domain.submission.SubmissionResult;
-import fi.helsinki.cs.tmc.intellij.holders.TmcCoreHolder;
-import fi.helsinki.cs.tmc.intellij.holders.TmcSettingsManager;
 import fi.helsinki.cs.tmc.intellij.io.SettingsTmc;
-import fi.helsinki.cs.tmc.intellij.runners.UploadRunner;
 import fi.helsinki.cs.tmc.intellij.ui.submissionresult.SubmissionResultHandler;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 /**
@@ -68,7 +47,7 @@ public class ExerciseUploadingService {
                             .submit(ProgressObserver.NULL_OBSERVER, exercise).call();
                     handler.showResultMessage(exercise, result, project);
                 } catch (Exception exception) {
-
+                    exception.printStackTrace();
                 }
             }
         }, "Uploading exercise, this may take several minutes", project);
