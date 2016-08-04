@@ -1,6 +1,5 @@
 package fi.helsinki.cs.tmc.intellij.services;
 
-import com.intellij.openapi.application.ApplicationManager;
 import fi.helsinki.cs.tmc.core.TmcCore;
 import fi.helsinki.cs.tmc.core.domain.Course;
 import fi.helsinki.cs.tmc.core.domain.Exercise;
@@ -8,6 +7,8 @@ import fi.helsinki.cs.tmc.core.domain.ProgressObserver;
 import fi.helsinki.cs.tmc.intellij.io.ProjectOpener;
 import fi.helsinki.cs.tmc.intellij.io.SettingsTmc;
 import fi.helsinki.cs.tmc.intellij.ui.projectlist.ProjectListManager;
+
+import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -30,7 +31,10 @@ public class ExerciseDownloadingService {
     }
 
     @NotNull
-    private static Thread createThread(final TmcCore core, final SettingsTmc settings, final CheckForExistingExercises checker) {
+    private static Thread createThread(final TmcCore core,
+                                       final SettingsTmc settings,
+                                       final CheckForExistingExercises checker) {
+
         return new Thread() {
             @Override
             public void run() {

@@ -1,9 +1,10 @@
 package fi.helsinki.cs.tmc.intellij.ui.projectlist;
 
-import com.intellij.ui.components.JBList;
 import fi.helsinki.cs.tmc.core.domain.Exercise;
 import fi.helsinki.cs.tmc.intellij.services.CourseAndExerciseManager;
 import fi.helsinki.cs.tmc.intellij.services.ObjectFinder;
+
+import com.intellij.ui.components.JBList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,14 +51,14 @@ public class ProjectListManager {
             return;
         }
 
-        for (JBList ProjectListJBList : list) {
-            if (list == null || !ProjectListJBList.getName().equals(course)) {
+        for (JBList jbList : list) {
+            if (list == null || !jbList.getName().equals(course)) {
                 continue;
             }
-            DefaultListModel model = (DefaultListModel) ProjectListJBList.getModel();
+            DefaultListModel model = (DefaultListModel) jbList.getModel();
             model.removeAllElements();
             addExercisesToList(new ObjectFinder(), course, model);
-            ProjectListJBList.setModel(model);
+            jbList.setModel(model);
         }
         refreshAllCourses();
     }
@@ -65,7 +66,7 @@ public class ProjectListManager {
     private static int counter = 0;
 
     public static void refresh(JBList list) {
-        if (counter%20 == 0) {
+        if (counter % 20 == 0) {
             refreshAllCourses();
         }
 
