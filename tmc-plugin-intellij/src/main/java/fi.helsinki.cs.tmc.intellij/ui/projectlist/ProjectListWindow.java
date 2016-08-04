@@ -6,13 +6,13 @@ import fi.helsinki.cs.tmc.intellij.io.ProjectOpener;
 import fi.helsinki.cs.tmc.intellij.services.CourseAndExerciseManager;
 import fi.helsinki.cs.tmc.intellij.services.ObjectFinder;
 import fi.helsinki.cs.tmc.intellij.ui.OperationInProgressNotification;
+import fi.helsinki.cs.tmc.intellij.ui.elements.ProjectListJBList;
 
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.components.JBList;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -98,7 +98,7 @@ public class ProjectListWindow {
         openButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JBList list = (JBList) tabbedPanelBase
+                ProjectListJBList list = (ProjectListJBList) tabbedPanelBase
                         .getSelectedComponent().getComponentAt(10, 10)
                         .getComponentAt(10, 10);
 
