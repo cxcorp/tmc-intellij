@@ -52,7 +52,7 @@ public class ProjectListManager {
         }
 
         for (JBList jbList : list) {
-            if (list == null || !jbList.getName().equals(course)) {
+            if (jbList == null || !jbList.getName().equals(course)) {
                 continue;
             }
             DefaultListModel model = (DefaultListModel) jbList.getModel();
