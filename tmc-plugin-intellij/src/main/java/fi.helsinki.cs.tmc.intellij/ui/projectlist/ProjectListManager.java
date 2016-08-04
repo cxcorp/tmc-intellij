@@ -63,15 +63,6 @@ public class ProjectListManager {
         refreshAllCourses();
     }
 
-    private static int counter = 0;
-
-    public static void refresh(JBList list) {
-        if (counter % 20 == 0) {
-            refreshAllCourses();
-        }
-
-    }
-
     public static void addExercisesToList(ObjectFinder finder,
                                           String course, DefaultListModel defaultListModel) {
 
