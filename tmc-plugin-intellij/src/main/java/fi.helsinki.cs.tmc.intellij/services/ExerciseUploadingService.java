@@ -48,30 +48,24 @@ public class ExerciseUploadingService {
             return;
         }
 
-        try {
            Exercise exercise = CourseAndExerciseManager
                     .get(getCourseName(exerciseCourse),
                             getExerciseName(exerciseCourse));
             getResults(project, exercise, core, handler);
             CourseAndExerciseManager.updateSingleCourse(getCourseName(exerciseCourse),
                     checker, finder, settings);
-        } catch (Exception exception) {
-            Messages.showErrorDialog(project, "Are your credentials correct?\n"
-                    + "Is this a TMC Exercise?\n"
-                    + "Are you connected to the internet?\n"
-                    + exception.getMessage() + " "
-                    + exception.toString(), "Error while submitting");
-        }
 
     }
 
-    private static void getResults(final Project project, final Exercise exercise, final TmcCore core,
+    private static void getResults(final Project project,
+                                   final Exercise exercise, final TmcCore core,
                                    final SubmissionResultHandler handler) {
         ThreadingService.runWithNotification(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final SubmissionResult result = core.submit(ProgressObserver.NULL_OBSERVER, exercise).call();
+                    final SubmissionResult result = core
+                            .submit(ProgressObserver.NULL_OBSERVER, exercise).call();
                     handler.showResultMessage(exercise, result, project);
                 } catch (Exception exception) {
 

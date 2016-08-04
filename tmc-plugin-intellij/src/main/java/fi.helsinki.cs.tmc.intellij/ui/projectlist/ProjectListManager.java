@@ -1,10 +1,11 @@
 package fi.helsinki.cs.tmc.intellij.ui.projectlist;
 
+import com.intellij.ui.components.JBList;
 import fi.helsinki.cs.tmc.core.domain.Exercise;
 import fi.helsinki.cs.tmc.intellij.services.CourseAndExerciseManager;
 import fi.helsinki.cs.tmc.intellij.services.ObjectFinder;
+import fi.helsinki.cs.tmc.intellij.ui.elements.ProjectListJBList;
 
-import com.intellij.ui.components.JBList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import javax.swing.JTabbedPane;
 
 public class ProjectListManager {
 
-    private static Map<String, List<JBList>> currentListElements;
+    private static Map<String, List<ProjectListJBList>> currentListElements;
     static List<ProjectListWindow> projectListWindows;
 
     public ProjectListManager() {
@@ -33,9 +34,9 @@ public class ProjectListManager {
         }
     }
 
-    public static void addList(JBList list) {
+    public static void addList(ProjectListJBList list) {
         if (currentListElements.get(list.getName()) == null) {
-            currentListElements.put(list.getName(), new ArrayList<JBList>());
+            currentListElements.put(list.getName(), new ArrayList<ProjectListJBList>());
         }
         currentListElements.get(list.getName()).add(list);
     }
@@ -46,21 +47,32 @@ public class ProjectListManager {
         }
     }
 
+
     public static void refreshCourse(String course) {
-        List<JBList> list = currentListElements.get(course);
+        List<ProjectListJBList> list = currentListElements.get(course);
         if (list == null) {
             return;
         }
 
-        for (JBList jbList : list) {
-            if (list == null || !jbList.getName().equals(course)) {
+        for (ProjectListJBList ProjectListJBList : list) {
+            if (list == null || !ProjectListJBList.getName().equals(course)) {
                 continue;
             }
-            DefaultListModel model = (DefaultListModel) jbList.getModel();
+            DefaultListModel model = (DefaultListModel) ProjectListJBList.getModel();
             model.removeAllElements();
             addExercisesToList(new ObjectFinder(), course, model);
-            jbList.setModel(model);
+            ProjectListJBList.setModel(model);
         }
+        refreshAllCourses();
+    }
+
+    private static int counter = 0;
+
+    public static void refresh(JBList list) {
+        if (counter%20 == 0) {
+            refreshAllCourses();
+        }
+
     }
 
     public static void addExercisesToList(ObjectFinder finder,
@@ -89,7 +101,7 @@ public class ProjectListManager {
         }
     }
 
-    public static void setCurrentListElements(HashMap<String, List<JBList>> currentListElements) {
+    public static void setCurrentListElements(HashMap<String, List<ProjectListJBList>> currentListElements) {
         ProjectListManager.currentListElements = currentListElements;
     }
 
