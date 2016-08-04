@@ -13,7 +13,9 @@ import java.util.Map;
 
 import javax.swing.DefaultListModel;
 
-
+/**
+ * Contains the ProjectListWindow.
+ */
 public class ProjectListManager {
 
     private static Map<String, List<JBList>> currentListElements;
