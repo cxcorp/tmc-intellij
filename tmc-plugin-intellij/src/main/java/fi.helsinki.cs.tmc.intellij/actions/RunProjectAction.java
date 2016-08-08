@@ -14,6 +14,7 @@ import com.intellij.execution.impl.RunManagerImpl;
 import com.intellij.execution.impl.RunnerAndConfigurationSettingsImpl;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.runners.ProgramRunner;
+import com.intellij.ide.util.ClassFilter;
 import com.intellij.ide.util.TreeClassChooser;
 import com.intellij.ide.util.TreeClassChooserFactory;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -178,11 +179,12 @@ public class RunProjectAction extends AnAction {
                     .getInstance(project);
             GlobalSearchScope scope = null;
             scope = GlobalSearchScope.moduleScope(module);
-            PsiClass ecClass = JavaPsiFacade.getInstance(project)
-                    .findClass("", scope);
+            PsiClass ecClass = JavaPsiFacade.getInstance(project).
+                    findClass("", scope);
+            ClassFilter filter = createClassFilter();
             chooser = factory
                     .createInheritanceClassChooser("Choose main class",
-                            scope, ecClass, null);
+                            scope, ecClass, null, filter);
             chooser.showDialog();
             if (chooser.getSelected() == null
                     || chooser.getSelected().findMethodsByName("main", true)
@@ -191,5 +193,14 @@ public class RunProjectAction extends AnAction {
             }
         }
         return chooser;
+    }
+
+    private ClassFilter createClassFilter() {
+        return new ClassFilter() {
+            @Override
+            public boolean isAccepted(PsiClass psiClass) {
+                return psiClass.findMethodsByName("main", true).length > 0;
+            }
+        };
     }
 }
