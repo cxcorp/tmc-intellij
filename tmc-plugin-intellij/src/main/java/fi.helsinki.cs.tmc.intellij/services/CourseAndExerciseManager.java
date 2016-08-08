@@ -119,8 +119,12 @@ public class CourseAndExerciseManager {
         getExerciseDatabase().setCourses(courses);
     }
 
-    private static void removeExercisesNotFoundFromLocalDirectories(List<Exercise> exercises, String courseName) {
-        List<String> exerciseNamesThroughDirectories = getExerciseNamesThroughDirectories(courseName);
+    private static void removeExercisesNotFoundFromLocalDirectories(List<Exercise> exercises,
+                                                                    String courseName) {
+
+        List<String> exerciseNamesThroughDirectories =
+                getExerciseNamesThroughDirectories(courseName);
+
         Iterator<Exercise> iterator = exercises.iterator();
 
         while (iterator.hasNext()) {
