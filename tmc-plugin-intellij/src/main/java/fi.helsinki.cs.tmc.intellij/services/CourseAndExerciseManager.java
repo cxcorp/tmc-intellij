@@ -157,6 +157,10 @@ public class CourseAndExerciseManager {
         boolean isNewCourse = getExerciseDatabase().getCourses().get(courseName) == null;
         Course course = finder.findCourseByName(courseName, TmcCoreHolder.get());
 
+        if (course == null) {
+            return;
+        }
+
         List<Exercise> existing = (ArrayList<Exercise>) checker
                 .getListOfDownloadedExercises(course.getExercises(), settings);
 

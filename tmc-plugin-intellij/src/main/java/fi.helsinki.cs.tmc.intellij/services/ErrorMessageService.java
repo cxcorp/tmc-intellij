@@ -51,6 +51,17 @@ public class ErrorMessageService {
                 + "to be able to download and submit exercises.";
     }
 
+    private String notifyAboutFailedSubmission(TmcCoreException exception) {
+        return errorCode(exception)
+                + "You need to set up TMC server address "
+                + "to be able to download and submit exercises.";
+    }
+
+    private String notifyAboutFailedSubmissionAttempt(TmcCoreException exception) {
+        return "Failed to establish connection to the server"
+                + "\n Check your Internet connection";
+    }
+
     /**
      * Error message, prints out the cause of the current exception.
      * @param exception The cause of an error.
@@ -93,6 +104,8 @@ public class ErrorMessageService {
 
                 if (str.contains("Download failed: tmc.mooc.fi: unknown error")) {
                     initializeNotification(notifyAboutInternetConnection(exception));
+                } else if (exception.getMessage().contains("Failed to fetch courses from the server")) {
+                    initializeNotification(notifyAboutFailedSubmissionAttempt(exception));
                 } else if (!TmcSettingsManager.get().userDataExists()) {
                     initializeNotification(notifyAboutUsernamePasswordAndServerAddress(exception));
                 } else if (TmcSettingsManager.get().getServerAddress().isEmpty()) {
