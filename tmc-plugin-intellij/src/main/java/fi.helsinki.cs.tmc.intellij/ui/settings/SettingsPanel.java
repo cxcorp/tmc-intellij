@@ -5,6 +5,7 @@ import fi.helsinki.cs.tmc.core.domain.ProgressObserver;
 import fi.helsinki.cs.tmc.intellij.holders.TmcCoreHolder;
 import fi.helsinki.cs.tmc.intellij.holders.TmcSettingsManager;
 import fi.helsinki.cs.tmc.intellij.io.SettingsTmc;
+import fi.helsinki.cs.tmc.intellij.services.CourseAndExerciseManager;
 import fi.helsinki.cs.tmc.intellij.services.PersistentTmcSettings;
 
 import com.intellij.openapi.components.ServiceManager;
@@ -175,9 +176,17 @@ public class SettingsPanel {
                 }
 
                 addCourSesToListOfAvailable(courses);
-                listOfAvailableCourses.setSelectedItem(TmcSettingsManager.get().getCourse());
+                if ((TmcSettingsManager.get().getCourse()) != null) {
+                    listOfAvailableCourses.setSelectedItem(TmcSettingsManager.get().getCourse());
+                } else {
+                    listOfAvailableCourses.setSelectedItem(getFirstFromAvailableCourses());
+                }
             }
         };
+    }
+
+    private Course getFirstFromAvailableCourses() {
+        return listOfAvailableCourses.getModel().getElementAt(0);
     }
 
     private void addCourSesToListOfAvailable(List<Course> courses) {
