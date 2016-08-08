@@ -102,7 +102,7 @@ public class CourseAndExerciseManager {
             PersistentExerciseDatabase.getInstance().getExerciseDatabase().setCourses(database);
         } catch (TmcCoreException exception) {
             ErrorMessageService error = new ErrorMessageService();
-            error.showMessage(exception);
+            error.showMessage(exception, false);
 
             /*Messages.showErrorDialog(new ObjectFinder().findCurrentProject(),
                     exception.getMessage()
