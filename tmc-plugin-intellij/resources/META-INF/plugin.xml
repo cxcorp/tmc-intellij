@@ -46,11 +46,11 @@
       <action id="Run Project" class="fi.helsinki.cs.tmc.intellij.actions.RunProjectAction" text="Run Project" description="Run Project" />
     </group>
 
-    <action class="fi.helsinki.cs.tmc.intellij.actions.UploadExerciseAction" id="SubmitButtonAction"  icon="TmcIcons.SUBMIT_BUTTON" >
+    <action class="fi.helsinki.cs.tmc.intellij.actions.UploadExerciseAction" text="Upload current exercise" description="Upload exercise" id="SubmitButtonAction"  icon="TmcIcons.SUBMIT_BUTTON" >
       <add-to-group group-id="NavBarToolBar" anchor="first" />
     </action>
 
-    <action class="fi.helsinki.cs.tmc.intellij.actions.RunProjectAction" id="RunProjectAction"  icon="TmcIcons.DONE_EXERCISE" >
+    <action class="fi.helsinki.cs.tmc.intellij.actions.RunProjectAction" text="Run current project" description="Run project" id="RunProjectAction"  icon="TmcIcons.DONE_EXERCISE" >
       <add-to-group group-id="NavBarToolBar" anchor="first" />
     </action>
 

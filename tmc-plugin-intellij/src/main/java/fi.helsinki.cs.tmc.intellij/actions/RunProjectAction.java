@@ -48,7 +48,8 @@ public class RunProjectAction extends AnAction {
         Module module = ProjectRootManager.getInstance(project)
                 .getFileIndex().getModuleForFile(ProjectRootManager
                         .getInstance(project).getContentRootsFromAllModules()[0]);
-        if (runManager.getSelectedConfiguration() == null) {
+        if (runManager.getSelectedConfiguration() == null
+                || checkConfigurationType(runManager, "Application")) {
             TreeClassChooser chooser = chooseMainClassForProject(project, module);
             if (chooser.getSelected() == null) {
                 return;
@@ -64,8 +65,14 @@ public class RunProjectAction extends AnAction {
         }
     }
 
+    private boolean checkConfigurationType(RunManager runManager, String desired) {
+        return !runManager.getSelectedConfiguration()
+                .getConfiguration().getType()
+                .getDisplayName().equals(desired);
+    }
+
     /**
-     * Makes sure the configuration has a defined main class
+     * Makes sure the configuration has a defined main class.
      * @param appCon Current configuration
      * @return Whether the class has a valid main class or not
      */
@@ -179,8 +186,8 @@ public class RunProjectAction extends AnAction {
                     .getInstance(project);
             GlobalSearchScope scope = null;
             scope = GlobalSearchScope.moduleScope(module);
-            PsiClass ecClass = JavaPsiFacade.getInstance(project).
-                    findClass("", scope);
+            PsiClass ecClass = JavaPsiFacade.getInstance(project)
+                    .findClass("", scope);
             ClassFilter filter = createClassFilter();
             chooser = factory
                     .createInheritanceClassChooser("Choose main class",
