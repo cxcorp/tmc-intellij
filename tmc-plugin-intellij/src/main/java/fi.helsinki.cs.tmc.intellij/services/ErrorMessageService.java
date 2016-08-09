@@ -145,6 +145,8 @@ public class ErrorMessageService {
             initializeNotification(notifyAboutInternetConnection(exception), type, bool);
         } else if (exception.getMessage().contains("Failed to fetch courses from the server")) {
             initializeNotification(notifyAboutFailedSubmissionAttempt(exception), type, bool);
+        } else if (exception.getMessage().contains("Failed to compress project")) {
+            initializeNotification(notifyAboutFailedSubmissionAttempt(exception), type, bool);
         } else if (!TmcSettingsManager.get().userDataExists()) {
             initializeNotification(notifyAboutUsernamePasswordAndServerAddress(exception),
                     type, bool);
@@ -162,8 +164,11 @@ public class ErrorMessageService {
         }
     }
     /**
-     * Controls which error message will be shown to the user.
+     * Controls which error message will be shown to the user. If the parameter bool
+     * is true, the message will be shown as a popup. If not, then it will be
+     * shown at the side.
      * @param exception The cause of an error.
+     * @param bool if the error message will be a pop up or not
      */
     public void showMessage(final TmcCoreException exception, final boolean bool) {
         if (bool) {
