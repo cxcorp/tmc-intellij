@@ -5,6 +5,7 @@ import fi.helsinki.cs.tmc.core.domain.Course;
 
 import com.google.common.base.Optional;
 
+import fi.helsinki.cs.tmc.intellij.services.CourseAndExerciseManager;
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 
 import java.io.File;

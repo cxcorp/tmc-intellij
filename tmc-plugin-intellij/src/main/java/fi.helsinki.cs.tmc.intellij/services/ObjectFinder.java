@@ -46,7 +46,7 @@ public class ObjectFinder {
         try {
             courses = core.listCourses(ProgressObserver.NULL_OBSERVER).call();
         } catch (TmcCoreException e) {
-            new ErrorMessageService().showMessage(e);
+            new ErrorMessageService().showMessage(e, false);
         } catch (Exception e) {
             e.printStackTrace();
         }

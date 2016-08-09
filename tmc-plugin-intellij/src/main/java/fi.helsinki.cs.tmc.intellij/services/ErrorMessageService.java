@@ -5,10 +5,11 @@ import fi.helsinki.cs.tmc.core.exceptions.TmcCoreException;
 import fi.helsinki.cs.tmc.intellij.holders.TmcSettingsManager;
 
 import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
+import com.intellij.openapi.ui.Messages;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -63,12 +64,39 @@ public class ErrorMessageService {
     }
 
     /**
+     * Error message, if TMC server address is incorrect.
+     * @param exception The cause of an error.
+     * @return String. Error message that will be shown to the user.
+     */
+    private String notifyAboutIncorrectServerAddress(TmcCoreException exception) {
+        return errorCode(exception) + "TMC server address is incorrect.";
+    }
+
+    /**
+     * Error message, if TMC username or password is incorrect.
+     * @param exception The cause of an error.
+     * @return String. Error message that will be shown to the user.
+     */
+    private String notifyAboutIncorrectUsernameOrPassword(TmcCoreException exception) {
+        return errorCode(exception) + "TMC Username or Password incorrect.";
+    }
+
+    /**
      * Error message, prints out the cause of the current exception.
      * @param exception The cause of an error.
      * @return String. Error message that will be shown to the user.
      */
     private String errorCode(TmcCoreException exception) {
         return exception.getCause().getMessage() + ". \n";
+    }
+
+    /**
+     * Error message, prints out the cause of the current exception.
+     * @param exception The cause of an error.
+     * @return String. Error message that will be shown to the user.
+     */
+    private String errorCode(Exception exception, String str) {
+        return exception + ". \n" + str;
     }
 
     /**
@@ -80,39 +108,89 @@ public class ErrorMessageService {
                     NotificationDisplayType.STICKY_BALLOON, true);
 
     /**
+     * Creates a new notification group TMC_ERROR_POPUP
+     * for TMC notifications to the notification board.
+     */
+    public static final NotificationGroup TMC_ERROR_POPUP =
+            new NotificationGroup("TMC Error Messages",
+                    NotificationDisplayType.STICKY_BALLOON, true);
+
+    /**
      * Generates a notification popup.
      * @param str Notification message.
      */
-    private void initializeNotification(String str) {
-        Project projects = new ObjectFinder().findCurrentProject();
-        Notification notification = TMC_NOTIFICATION
-                .createNotification(str,
-                        NotificationType.WARNING);
-        Notifications.Bus.notify(notification, projects);
+    private void initializeNotification(final String str,
+                                        NotificationType type,
+                                        boolean bool) {
+        final Project projects = new ObjectFinder().findCurrentProject();
+        if (bool) {
+            Messages.showMessageDialog(projects,
+                    str, "", Messages.getErrorIcon());
+        } else {
+            Notification notification = TMC_NOTIFICATION
+                    .createNotification(str,
+                            type);
+            Notifications.Bus.notify(notification, projects);
+        }
+    }
+
+    private void notificationCompilerForTmcRefreshButton(TmcCoreException exception, boolean bool) {
+        selectMessage(exception, bool);
+    }
+
+    private void selectMessage(TmcCoreException exception, boolean bool) {
+        String str = exception.getCause().getMessage();
+        NotificationType type = NotificationType.WARNING;
+        if (str.contains("Download failed: tmc.mooc.fi: unknown error")) {
+            initializeNotification(notifyAboutInternetConnection(exception), type, bool);
+        } else if (exception.getMessage().contains("Failed to fetch courses from the server")) {
+            initializeNotification(notifyAboutFailedSubmissionAttempt(exception), type, bool);
+        } else if (!TmcSettingsManager.get().userDataExists()) {
+            initializeNotification(notifyAboutUsernamePasswordAndServerAddress(exception),
+                    type, bool);
+        } else if (str.contains("401")) {
+            initializeNotification(notifyAboutIncorrectUsernameOrPassword(exception),
+                    NotificationType.ERROR, bool);
+        } else if (TmcSettingsManager.get().getServerAddress().isEmpty()) {
+            initializeNotification(notifyAboutEmptyServerAddress(exception), type, bool);
+        } else if (str.contains("500")) {
+            initializeNotification(notifyAboutIncorrectServerAddress(exception),
+                    NotificationType.ERROR, bool);
+        } else {
+            initializeNotification(errorCode(exception), NotificationType.ERROR, bool);
+            exception.printStackTrace();
+        }
+    }
+    /**
+     * Controls which error message will be shown to the user.
+     * @param exception The cause of an error.
+     */
+    public void showMessage(final TmcCoreException exception, final boolean bool) {
+        if (bool) {
+            notificationCompilerForTmcRefreshButton(exception, bool);
+        } else {
+            ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
+                @Override
+                public void run() {
+                    selectMessage(exception, bool);
+                }
+            });
+        }
     }
 
     /**
-     * Determine which error message will be shown to the user.
+     * Controls which error message will be shown to the user.
      * @param exception The cause of an error.
+     * @param errorMessage Error message.
      */
-    public void showMessage(final TmcCoreException exception) {
+    public void showMessage(final Exception exception, final String errorMessage) {
 
         ApplicationManager.getApplication().executeOnPooledThread(new Runnable() {
             @Override
             public void run() {
-                String str = exception.getCause().getMessage();
-
-                if (str.contains("Download failed: tmc.mooc.fi: unknown error")) {
-                    initializeNotification(notifyAboutInternetConnection(exception));
-                } else if (exception.getMessage().contains("Failed to fetch courses from the server")) {
-                    initializeNotification(notifyAboutFailedSubmissionAttempt(exception));
-                } else if (!TmcSettingsManager.get().userDataExists()) {
-                    initializeNotification(notifyAboutUsernamePasswordAndServerAddress(exception));
-                } else if (TmcSettingsManager.get().getServerAddress().isEmpty()) {
-                    initializeNotification(notifyAboutEmptyServerAddress(exception));
-                } else {
-                    initializeNotification(errorCode(exception));
-                }
+                initializeNotification(errorCode(exception, errorMessage),
+                        NotificationType.ERROR, false);
+                exception.printStackTrace();
             }
         });
     }
