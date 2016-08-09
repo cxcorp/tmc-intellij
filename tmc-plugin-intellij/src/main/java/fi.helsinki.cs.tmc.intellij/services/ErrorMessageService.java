@@ -23,6 +23,12 @@ import com.intellij.openapi.ui.Messages;
  */
 public class ErrorMessageService {
 
+    private String notifyAboutCourseServerAddressAndInternet() {
+        return "Failed to download courses\n"
+                + "Check that you have the correct course and server address\n"
+                + "that you are connected to Internet";
+    }
+
     /**
      * Error message, if TMC username or password are not initialized.
      * @param exception The cause of an error.
@@ -143,8 +149,8 @@ public class ErrorMessageService {
     private void selectMessage(TmcCoreException exception, boolean bool) {
         String str = exception.getCause().getMessage();
         NotificationType type = NotificationType.WARNING;
-        if (str.contains("Download failed: tmc.mooc.fi: unknown error")) {
-            initializeNotification(notifyAboutInternetConnection(exception), type, bool);
+        if (str.contains("Download failed") || str.contains("404") || str.contains("500")) {
+            initializeNotification(notifyAboutCourseServerAddressAndInternet(), type, bool);
         } else if (exception.getMessage().contains("Failed to fetch courses from the server")) {
             initializeNotification(notifyAboutFailedSubmissionAttempt(exception), type, bool);
         } else if (exception.getMessage().contains("Failed to compress project")) {
@@ -157,9 +163,6 @@ public class ErrorMessageService {
                     NotificationType.ERROR, bool);
         } else if (TmcSettingsManager.get().getServerAddress().isEmpty()) {
             initializeNotification(notifyAboutEmptyServerAddress(exception), type, bool);
-        } else if (str.contains("500") || str.contains("404")) {
-            initializeNotification(notifyAboutIncorrectServerAddress(exception),
-                    NotificationType.ERROR, bool);
         } else {
             initializeNotification(errorCode(exception), NotificationType.ERROR, bool);
             exception.printStackTrace();
