@@ -5,14 +5,16 @@ import fi.helsinki.cs.tmc.core.exceptions.TmcCoreException;
 import fi.helsinki.cs.tmc.intellij.holders.TmcSettingsManager;
 
 import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.ui.Messages;
 
 import com.intellij.openapi.application.ApplicationManager;
+
 import com.intellij.openapi.project.Project;
+
+import com.intellij.openapi.ui.Messages;
 
 /**
  * Pops up user friendly warnings for CourseAndExerciseManager exceptions.
@@ -155,7 +157,7 @@ public class ErrorMessageService {
                     NotificationType.ERROR, bool);
         } else if (TmcSettingsManager.get().getServerAddress().isEmpty()) {
             initializeNotification(notifyAboutEmptyServerAddress(exception), type, bool);
-        } else if (str.contains("500")) {
+        } else if (str.contains("500") || str.contains("404")) {
             initializeNotification(notifyAboutIncorrectServerAddress(exception),
                     NotificationType.ERROR, bool);
         } else {
