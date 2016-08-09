@@ -56,12 +56,13 @@ public class PasteService {
             URI uri = core.pasteWithComment(ProgressObserver.NULL_OBSERVER,
                     exercise, message).call();
             window.showResult(uri);
-            updateProjectView();
+//            updateProjectView();
         } catch (TmcCoreException exception) {
             handleException(exception);
         } catch (Exception e) {
             e.printStackTrace();
             Messages.showErrorDialog("Uknown error", "Error while uploading to TMC Pastebin");
+            updateProjectView();
         }
     }
 
