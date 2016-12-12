@@ -1,13 +1,16 @@
 package fi.helsinki.cs.tmc.intellij.actions.buttonactions;
 
-
 import fi.helsinki.cs.tmc.intellij.ui.settings.SettingsWindow;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.wm.WindowManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.JFrame;
 
 /**
  * Opens the settings window. Defined in plugin.xml on line &lt;action id="Settings"
@@ -21,15 +24,25 @@ public class TmcSettingsAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
         logger.info("Performing TmcSettingsAction. @TmcSettingsAction");
+        Project currentProject = anActionEvent.getProject();
         showSettings();
+        tryMoveToSameMonitorAsProject(currentProject);
     }
 
-    public void showSettings() {
+    private void showSettings() {
         logger.info("Opening TMC setting window. @TmcSettingsAction");
-        if (window == null || window.isClosed()) {
+        if (window == null) {
             window = new SettingsWindow();
-        } else {
-            window.show();
+        }
+
+        window.show();
+    }
+
+    private void tryMoveToSameMonitorAsProject(Project project) {
+        WindowManager winMan = WindowManager.getInstance();
+        JFrame projectFrame = winMan.getFrame(project);
+        if (projectFrame != null) {
+            window.setLocationRelativeTo(projectFrame);
         }
     }
 }

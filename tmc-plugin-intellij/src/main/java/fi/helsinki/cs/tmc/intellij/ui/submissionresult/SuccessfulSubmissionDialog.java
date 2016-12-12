@@ -81,6 +81,7 @@ public class SuccessfulSubmissionDialog extends JDialog {
         setAlwaysOnTop(true);
 
         pack();
+
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.requestFocusInWindow(true);

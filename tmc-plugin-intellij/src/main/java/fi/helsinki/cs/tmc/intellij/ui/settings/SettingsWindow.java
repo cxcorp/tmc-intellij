@@ -25,20 +25,18 @@ public class SettingsWindow {
         frame.setTitle("TMC Settings");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         frame.setResizable(false);
         frame.setSize(new Dimension(800, 500));
         frame.setAlwaysOnTop(true);
-    }
-
-    public boolean isClosed() {
-        return (frame == null || !frame.isVisible());
     }
 
     public void show() {
         logger.info("Showing SettingsWindow. @SettingsWindow");
         frame.setVisible(false);
         frame.setVisible(true);
+    }
+
+    public void setLocationRelativeTo(JFrame projectFrame) {
+        frame.setLocationRelativeTo(projectFrame);
     }
 }
